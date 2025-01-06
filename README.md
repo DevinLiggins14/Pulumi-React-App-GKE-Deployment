@@ -16,26 +16,22 @@
 
 <h2>Description</h2>
 <br/> 
-
+In this project we will deploy a React application to GKE and we will use Pulumi to write the infratructure as code. JavaScript will be the language used for writing our code to deploy infrastructure. We will create our GK cluster, deployment object, and a load balancer service for deploying our react application on Google Kubernetes Engine.
 <br />
 <br/> Project Architecture: <br/>
-<img src=""/>
+<img src="https://github.com/user-attachments/assets/a34c5b64-9ce4-4139-baba-3a0254a6d60f"/>
 <br/> 
+There will be a react application directory which will have source, app, and docker files. For Pulumi the code will be written in JS and there will be a kubernetes provider along with the GCP provider. GKE will create the cluster and kubernetes will be used to create the deployment object and load balancer service.
 
+<br/> <br/> 
+
+We will containerize the application with a `Dockerfile` and run docker build to create a Docker image. From there we will push our container to the `GCR (Google Container Registry)` and use the image url to deploy the docker image on `GKE` using the deployment object. The `deployment object` in kubernetes will be defined within the `Pulumi` code. Then to expose the application we will use a `load balancer service` and map it to the port of our container
   <br/>
 
 <h2> Services involved: </h2>
 
 
 
-
- ##  Step 1: Configure Terraform 
-
-
-
-### **Notes for Usage**
-1. **Required Services**: 
-2. **Optional Services**: 
 
 
 
@@ -47,3 +43,5 @@
 
 
  ##  Step 1: 
+
+   <br/> We will containerize the application with a `Dockerfile` and run docker build to create a Docker image. From there we will push our container to the `GCR (Google Container Registry)` and use the image url to deploy the docker image on `GKE` using the deployment object. The `deployment object` in kubernetes will be defined within the `Pulumi` code. Then to expose the application we will use a `load balancer service` and map it to the port of our container <br/> 
