@@ -30,7 +30,15 @@ We will containerize the application with a `Dockerfile` and run docker build to
 
 <h2> Services involved: </h2>
 
-
+| **Service**            | **Description**                                                                                   |
+|-------------------------|---------------------------------------------------------------------------------------------------|
+| **React**              | Frontend framework for building the application.                                                  |
+| **Docker**             | Used to containerize the React application with a `Dockerfile`.                                   |
+| **Google Container Registry (GCR)** | Stores the Docker image for deployment.                                                         |
+| **Google Kubernetes Engine (GKE)**  | Hosts the Kubernetes cluster for deploying and managing the React app.                            |
+| **Pulumi**             | Infrastructure as Code tool to provision GKE and Kubernetes resources using JavaScript.           |
+| **Kubernetes**         | Manages the application deployment with a `Deployment Object` and exposes it via a `Load Balancer Service`. |
+| **GCP Providers**      | Pulumi's provider for managing GCP resources like GKE and GCR.                                     |
 
 
 
@@ -38,10 +46,10 @@ We will containerize the application with a `Dockerfile` and run docker build to
 <p align="center">
   
 ### **Prerequisites**  
-- Have an []()
+- Have an [Google Cloud Account](https://cloud.google.com/)
 - Install []().  
 
 
  ##  Step 1: 
 
-   <br/> We will containerize the application with a `Dockerfile` and run docker build to create a Docker image. From there we will push our container to the `GCR (Google Container Registry)` and use the image url to deploy the docker image on `GKE` using the deployment object. The `deployment object` in kubernetes will be defined within the `Pulumi` code. Then to expose the application we will use a `load balancer service` and map it to the port of our container <br/> 
+   <br/>   <br/> 
