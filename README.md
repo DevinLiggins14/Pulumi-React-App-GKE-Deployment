@@ -62,12 +62,32 @@ https://github.com/user-attachments/assets/4337a9aa-9cad-49dd-8224-ff06dc42523d
 
 
 
-## Step 2: 
+## Step 2: Push the Docker Image to GCR (Google Container Registry)
 
-<br/> <br/> 
+<br/> Now we need to push the `docker image` to `GCR` so that it can be deployed on the `GKE cluster` later. However since the container registry is depreciated from within GCP we will use the artifact registry instead. We will need to tag the images and  Click on create repository and choose docker  <br/> 
+
+<br/> Install [gcloud CLI](https://cloud.google.com/sdk/docs/install)  and authenticate in the steps below to avoid permission errors <br/> 
+
+```Bash
+# Build the Docker image
+docker build -t us.gcr.io/$GCP_PROJECT_ID/react-todolist-app .
+
+# Authenticate GCP (In browser)
+gcloud auth login
+
+# Change project
+gcloud config set project PROJECT_ID
+
+# Push the image to GCR
+docker push us.gcr.io/$GCP_PROJECT_ID/react-todolist
+```
+
+<img src="https://github.com/user-attachments/assets/4dfe7ace-16d1-45d8-9f21-78cf52e8b92e"/>
+<img src="https://github.com/user-attachments/assets/c9f86a16-346c-4332-9cb5-ede9ff997d9a"/>
+
+https://github.com/user-attachments/assets/a5ceabaa-a1c0-4c95-a1a4-35f19e3318e2
 
 
-<img src=""/>
 
 <br/> <br/> 
 
