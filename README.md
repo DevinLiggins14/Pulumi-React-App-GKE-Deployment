@@ -47,7 +47,7 @@ We will containerize the application with a `Dockerfile` and run docker build to
   
 ### **Prerequisites**  
 - Have an [Google Cloud Account](https://cloud.google.com/)
-- Install []().  
+- Rhel 9 Linux Server or equivalent   
 
 
  ##  Step 1: Test the application
@@ -55,4 +55,47 @@ We will containerize the application with a `Dockerfile` and run docker build to
    <br/> Before moving the `Docker image` to GCR I will build a docker image from the Dockerfile and run the application locally to test that it's working properly. `git clone` can be run to follow along with this repository  <br/> 
 
 <img src="https://github.com/user-attachments/assets/44ffd9c5-195d-4ab2-bfb3-ea43546d31ef"/>
+<img src="https://github.com/user-attachments/assets/aac8ed03-adf3-4036-bfcb-049cf97e3bf3"/>
+<br/>     <br/>
+<img src=""/>
+
+
+## Step 2: 
+
+<br/> <br/> 
+
+
+<img src=""/>
+
+<br/> <br/> 
+
+
+<img src=""/>
+
+<br/> <br/> 
+
+
+<img src=""/>
+
+<br/> <br/> 
+
+
+<img src=""/>
+
+<br/> <br/> 
+
+
+<img src=""/>
+
+<br/> <br/> 
+
+
+<img src=""/>
+
+<br/> <br/> 
+
+
+<img src=""/>
+
+
 
