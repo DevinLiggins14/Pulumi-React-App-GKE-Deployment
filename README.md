@@ -56,8 +56,11 @@ We will containerize the application with a `Dockerfile` and run docker build to
 
 <img src="https://github.com/user-attachments/assets/44ffd9c5-195d-4ab2-bfb3-ea43546d31ef"/>
 <img src="https://github.com/user-attachments/assets/aac8ed03-adf3-4036-bfcb-049cf97e3bf3"/>
-<br/>     <br/>
-<img src=""/>
+<br/>  Here is the containerized react application running in my local browser   <br/>
+
+
+https://github.com/user-attachments/assets/4337a9aa-9cad-49dd-8224-ff06dc42523d
+
 
 
 ## Step 2: 
@@ -95,6 +98,39 @@ We will containerize the application with a `Dockerfile` and run docker build to
 <br/> <br/> 
 
 
+<img src=""/>
+
+<br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
+<img src=""/>
+   <br/>   <br/> 
 <img src=""/>
 
 
