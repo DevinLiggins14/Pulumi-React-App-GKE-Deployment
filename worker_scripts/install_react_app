@@ -1,0 +1,70 @@
+# Ensure Docker, Node.js, and npm are installed
+
+# Step 1: Create a new React app dir
+npx create-react-app react-todo-list-app
+
+# Step 2: Navigate into the project directory
+cd react-todo-list-app
+
+
+# Replace the /src/App.js file
+cat > src/App.js <<EOF
+import React, { useState } from 'react';
+
+function App() {
+  const [tasks, setTasks] = useState([]);
+  const [task, setTask] = useState('');
+
+  const addTask = () => {
+    if (task) {
+      setTasks([...tasks, task]);
+      setTask('');
+    }
+  };
+
+  return (
+    <div style={{ padding: '20px' }}>
+      <h1>To-Do List</h1>
+      <input
+        type="text"
+        value={task}
+        onChange={(e) => setTask(e.target.value)}
+        placeholder="Add a task"
+      />
+      <button onClick={addTask}>Add</button>
+      <ul>
+        {tasks.map((t, index) => (
+          <li key={index}>{t}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export default App;
+EOF
+
+# Create the DockerFile
+cat > Dockerfile <<EOF
+# Stage 1: Build the React app
+FROM node:14 as builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+# Stage 2: Serve the app with NGINX
+FROM nginx:stable-alpine
+COPY --from=builder /app/build /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
+EOF
+
+# Create a docker image and run the app as a container
+
+# Step 1: Build the Docker image
+docker build -t react-todo-app .
+
+# Step 2: Run the Docker container
+docker run -p 80:80 react-todo-app
