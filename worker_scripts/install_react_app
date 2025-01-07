@@ -67,4 +67,4 @@ EOF
 docker build -t react-todo-app .
 
 # Step 2: Run the Docker container
-docker run -p 80:80 react-todo-app
+docker run -d -p 80:80 react-todo-app
