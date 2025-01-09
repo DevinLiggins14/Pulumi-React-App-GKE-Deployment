@@ -151,6 +151,14 @@ exports.clusterIP = cluster.endpoint
 
 <br/> quick error I will solve by adding the project ID to the Application Default Credentials (ADC) so pulumi will be able to load my application credentials.   <br/> 
 
+<br/> Run `gcloud auth application-default set-quota-project <project-ID>` to add credentials and `cat /root/.config/gcloud/application_default_credentials.json` to confirm. Then run `pulumi up` again
+<br/>
+
+
+
+https://github.com/user-attachments/assets/a8d1cd95-0d5b-4021-bc69-636f7f83dfb1
+
+
 
 <img src=""/>
 
