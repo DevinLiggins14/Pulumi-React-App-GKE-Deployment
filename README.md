@@ -89,27 +89,67 @@ https://github.com/user-attachments/assets/a5ceabaa-a1c0-4c95-a1a4-35f19e3318e2
 
 
 
-<br/> <br/> 
+## Step 3: Start writing and configure Pulumi scripts
+
+<br/> Create a directory for the Pulumi scripts. Then initialize a pulumi `gcp-javascript` template for it.  <br/> 
+
+<br/> Enter the GCP project ID <br/> 
 
 
-<img src=""/>
-
-<br/> <br/> 
-
-
-<img src=""/>
-
-<br/> <br/> 
+<img src="https://github.com/user-attachments/assets/31e0e7aa-ee17-47aa-adc9-d4cb1d56b123"/>
+<img src="https://github.com/user-attachments/assets/3b953a19-a1ea-43ef-a9c1-5cba7d5b497a"/>
 
 
-<img src=""/>
-
-<br/> <br/> 
+<br/> Next we need to install a Pulumi kubernetes dependency because we will need a package for kubernetes to deploy the kubernetes object and load-balancer service.  <br/> 
 
 
-<img src=""/>
+```Bash
+# Run to install kubernetes package
+npm install @pulumi/kubernetes
+# Set location
+pulumi config set gcp:location us-central1-c
+# Confirm
+cat Pulumi.dev.yaml
+```
 
-<br/> <br/> 
+<img src="https://github.com/user-attachments/assets/9de4aae1-5db5-4ab4-9355-4c280dc5ce5d"/>
+
+<br/> Next configure the index.js file for to require kubernetes. Also add the gcp variable and location defined earlier <br/>
+
+
+
+https://github.com/user-attachments/assets/8503f680-ed01-4413-8f6d-62565576e994
+
+
+
+
+<img src="https://github.com/user-attachments/assets/df03ca7a-3b6c-40a8-aafd-71fef77c9cc6"/>
+
+<br/> Next will be to write the code to create a `GKE Cluster` in GCP <br/> 
+
+```js
+// Create a GKE Cluster
+const cluster = new gcp.container.Cluster("app-cluster", {
+  name: "app-cluster",
+  location: zone,
+  initialNodeCount: 3,
+  minMasterVersion: "latest",
+  nodeConfig: {
+    machineType: "g1-small",
+    diskSizeGb: 32,
+  },
+});
+
+exports.clusterIP = cluster.endpoint
+```
+
+
+<br/> Now finally run the `pulumi up` command to provision the cluster <br/> 
+
+
+<img src="https://github.com/user-attachments/assets/b387a9f0-ebe7-46b0-82c0-26d94cbce371"/>
+
+<br/> quick error I will solve by adding the project ID to the Application Default Credentials (ADC) so pulumi will be able to load my application credentials.   <br/> 
 
 
 <img src=""/>
