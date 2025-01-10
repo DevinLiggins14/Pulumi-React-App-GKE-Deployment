@@ -159,15 +159,187 @@ exports.clusterIP = cluster.endpoint
 https://github.com/user-attachments/assets/a8d1cd95-0d5b-4021-bc69-636f7f83dfb1
 
 
+## Step 3: Write the configurations in pulumi for the load balancer service and deployment object   
+
+<br/> Once the the Cluster is created return to the index.js file and configure the GKE Cluster to the kubernetes provider so that deployments and onjects can be within the created Cluster. Since the cluster was created using Pulumi we must make changes to the files instead of using command line access directly so it will be easier to scale and manage. I  will make changes to the index.js file now based on the [pulumi GKE documentation](https://www.pulumi.com/registry/packages/kubernetes/how-to-guides/gke/) to create the kubeconfig.  <br/>
+
+<br/> I will also need to define the kubernetes provider <br/> 
+
+
+```js
+// Kubeconfig
+const kubeconfig = pulumi.
+    all([ cluster.name, cluster.endpoint, cluster.masterAuth ]).
+    apply(([ name, endpoint, masterAuth ]) => {
+        const context = ${gcp.config.project}_${gcp.config.zone}_${name};
+        return apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: ${masterAuth.clusterCaCertificate}
+    server: https://${endpoint}
+  name: ${context}
+contexts:
+- context:
+    cluster: ${context}
+    user: ${context}
+  name: ${context}
+current-context: ${context}
+kind: Config
+preferences: {}
+users:
+- name: ${context}
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: gke-gcloud-auth-plugin
+      installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
+        https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      provideClusterInfo: true
+;
+    });
+
+// Create a Kubernetes provider instance that uses our cluster from above.
+const clusterProvider = new k8s.Provider("k8s-provider", {
+  kubeconfig: kubeconfig,
+});
+```
+
+This  generates a `kubeconfig` within index.js for a Kubernetes cluster managed by Pulumi.  
+It uses the cluster's `name`, `endpoint`, and authentication details (`masterAuth`) to construct a configuration string in YAML format.  
+
+The `kubeconfig` includes cluster information like `certificate-authority-data` and `server`, along with contexts that define the `cluster`, `user`, and `current-context`.  
+It also specifies user credentials for authentication, leveraging the `gke-gcloud-auth-plugin` for integration with GKE.  
+
+Finally, a Kubernetes provider instance (`clusterProvider`) is created using this `kubeconfig`, enabling Pulumi to manage Kubernetes resources within the specified cluster. Now each deployment will be associated with the GKE cluster created.
+
+
+<br/> Now to create a deployment for the application that uses the docker image within GCR artifact registry and a load balancer kubernetes service to expose the port the container the will publically run on  <br/> 
+
+```js
+"use strict";
+const pulumi = require("@pulumi/pulumi");
+const gcp = require("@pulumi/gcp");
+const k8s = require("@pulumi/kubernetes");
+
+const gcpConfig = new pulumi.Config("gcp");
+const zone = gcpConfig.require("zone")
+
+// Create a GKE Cluster
+const cluster = new gcp.container.Cluster("app-cluster", {
+  name: "app-cluster",
+  location: zone,
+  initialNodeCount: 3,
+  minMasterVersion: "latest",
+  nodeConfig: {
+    machineType: "g1-small",
+    diskSizeGb: 32,
+  },
+});
+
+exports.clusterIP = cluster.endpoint
+
+// Kubeconfig
+const kubeconfig = pulumi.
+    all([ cluster.name, cluster.endpoint, cluster.masterAuth ]).
+    apply(([ name, endpoint, masterAuth ]) => {
+        const context = `${gcp.config.project}_${gcp.config.zone}_${name}`;
+        return `apiVersion: v1
+clusters:
+- cluster:
+    certificate-authority-data: ${masterAuth.clusterCaCertificate}
+    server: https://${endpoint}
+  name: ${context}
+contexts:
+- context:
+    cluster: ${context}
+    user: ${context}
+  name: ${context}
+current-context: ${context}
+kind: Config
+preferences: {}
+users:
+- name: ${context}
+  user:
+    exec:
+      apiVersion: client.authentication.k8s.io/v1beta1
+      command: gke-gcloud-auth-plugin
+      installHint: Install gke-gcloud-auth-plugin for use with kubectl by following
+        https://cloud.google.com/blog/products/containers-kubernetes/kubectl-auth-changes-in-gke
+      provideClusterInfo: true
+`;
+    });
+
+// Create a Kubernetes provider instance that uses our cluster from above.
+const clusterProvider = new k8s.Provider("k8s-provider", {
+  kubeconfig: kubeconfig,
+});
+
+// Create a deployment for the application
+const reactAppLabels = {
+  app: "react-todo-app"
+}
+const deployment = new k8s.apps.v1.Deployment("app-deployment",{
+  metadata:{
+    name: "app-deployment"
+  },
+  spec:{
+    replicas: 1,
+    selector:{
+      matchLabels: reactAppLabels
+    },
+    template:{
+      metadata:{
+        labels: reactAppLabels
+      },
+      spec:{
+        containers: [
+          {
+            name: "react-app-container",
+            image: "us.gcr.io/${GCP_PROJECT_ID}/react-todo-list-app",
+            ports: [
+              {
+                containerPort: 80
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+
+},{provider: clusterProvider})
+
+const service = new k8s.core.v1.Service("app-service",{
+  metadata:{
+    name: "react-app-lb-service"
+  },
+  spec:{
+    type: "LoadBalancer",
+    ports:[
+      {
+        port: 80,
+        targetPort: 80
+      }
+    ],
+    selector: reactAppLabels
+  }
+},{provider: clusterProvider})
+
+exports.servicePublicIP = service.status.apply(s=>s.loadBalancer.ingress[0].ip)
+```
+
+This code demonstrates how I can use Pulumi to manage the deployment of my React application on Google Kubernetes Engine (GKE). It begins by creating a GKE cluster named `app-cluster` with three nodes in the specified zone, ensuring the infrastructure is tailored to the project's needs. I then generate a kubeconfig file dynamically, allowing me to authenticate and interact with the cluster seamlessly. Using this configuration, I set up a Kubernetes provider, which serves as the foundation for managing resources within the cluster.  
+
+To deploy my React application, I define a Kubernetes deployment that uses a pre-built Docker image stored in Google Container Registry (GCR). This ensures my application is packaged and ready for scaling within the cluster. Finally, I create a Kubernetes service of type `LoadBalancer` to expose the application publicly. The service provides an external IP address, making it accessible to users, and this IP is exported for easy reference in the project.  
+
+
+
+## Step 4: Deploy the application 
+
+<br/> Now I will run `pulumi up` to deploy the application as a container on the GKE Cluster and access it using the cluster IP <br/> 
 
 <img src=""/>
-
-<br/> <br/> 
-
-
 <img src=""/>
-
-<br/>   <br/> 
 <img src=""/>
    <br/>   <br/> 
 <img src=""/>
