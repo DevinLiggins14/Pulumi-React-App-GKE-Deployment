@@ -338,39 +338,20 @@ To deploy my React application, I define a Kubernetes deployment that uses a pre
 
 <br/> Now I will run `pulumi up` to deploy the application as a container on the GKE Cluster and access it using the cluster IP <br/> 
 
-<img src=""/>
-<img src=""/>
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
-   <br/>   <br/> 
-<img src=""/>
+
+
+
+https://github.com/user-attachments/assets/b15838da-5de2-46d2-adbd-2255845c1b9a
+
+
+## 🎉 Project Successfully Deployed!  
+
+This project demonstrates the successful deployment of a Dockerized React application to a Kubernetes cluster using Pulumi.<br/>  
+We implemented Infrastructure as Code (IaC) using Pulumi to define and manage the Kubernetes cluster and its resources.<br/>  
+The Docker container for the React application was deployed as a Kubernetes `Deployment`, ensuring scalability and resilience.<br/>  
+Finally, the application was exposed to the internet via a Kubernetes `LoadBalancer` service, making it accessible on port 80.<br/>  
+
+This project showcases the seamless integration of containerized applications with Kubernetes and Pulumi, highlighting a DevOps workflow.
 
 
 
